@@ -18,7 +18,7 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('eventId', 'calendar', 'title', 'date', 'time', 'content_type', 'duration', 'note')
+        fields = ('eventId', 'calendar', 'title', 'date', 'time', 'content_type', 'duration', 'note', 'isDeleted')
         # fields = ('title', 'date', 'time', 'content_type', 'duration', 'note')
     
     # def to_representation(self, instance):
@@ -30,11 +30,17 @@ class AccountSerializer(serializers.HyperlinkedModelSerializer):
         model = Account
         fields = ('id', 'username')
 
+class AccountPrivateSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Account
+        fields = ('id', 'username', 'email', 'password')
+
 class MembershipSerializer(serializers.HyperlinkedModelSerializer):
     # calendarId = serializers.PrimaryKeyRelatedField(read_only=True)
     # accountId = serializers.PrimaryKeyRelatedField(read_only=True)
     calendar = serializers.PrimaryKeyRelatedField(many=False, queryset=Calendar.objects.all())
     account = serializers.PrimaryKeyRelatedField(many=False, queryset=Account.objects.all())
+    # url = serializers.HyperlinkedIdentityField(view_name='calendar:membership-detail')
 
     class Meta:
         model = Membership
